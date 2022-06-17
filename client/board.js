@@ -47,8 +47,8 @@ socket.on("dis", (room) => {
 })
 socket.on("link", (rm) => {
     document.getElementById("text").innerHTML = "Room Code : <span>" + rm + "</span>";
-    let currloc = window.location.href;
-    window.location.href = currloc + rm;
+    // let currloc = window.location.href;
+    // window.location.href = currloc + rm;
 })
 socket.on("player_connected", (s) => {
     if (player_id === 0) {
