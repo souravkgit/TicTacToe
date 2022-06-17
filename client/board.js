@@ -140,8 +140,10 @@ boxes.forEach(box => {
 socket.on("invalid", (code) => {
     window.alert("Entered roomcode is invalid!!");
     window.location.href = './start';
+    return;
 })
 socket.on("roomfull", (code) => {
     window.alert("Entered roomcode is Already Full!!");
-    window.location.href = './start'
+    window.location.href = './start';
+    return;
 })
