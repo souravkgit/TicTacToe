@@ -1,4 +1,3 @@
-// var socket = io();
 var socket = io('/');
 
 window.onload = chngp();
@@ -47,8 +46,6 @@ socket.on("dis", (room) => {
 })
 socket.on("link", (rm) => {
     document.getElementById("text").innerHTML = "Room Code : <span>" + rm + "</span>";
-    // let currloc = window.location.href;
-    // window.location.href = currloc + rm;
 })
 socket.on("player_connected", (s) => {
     if (player_id === 0) {
@@ -80,7 +77,6 @@ socket.on("reload", (pid) => {
         document.getElementById('logs').innerHTML = "New Game started , Opponent's Turn";
         canclick = false;
     }
-    // document.getElementById('rs_btn').style.display = "none";
 })
 socket.on("gamestart", (room) => {
     room_id = room;
@@ -100,7 +96,6 @@ socket.on("gameover", (id) => {
     else {
         document.getElementById('logs').innerHTML = "Your opponent has won this round";
     }
-    // document.getElementById('rs_btn').style.display = "inherit";
     gameover = true;
 })
 socket.on("update_grid", (id, s) => {
@@ -129,7 +124,6 @@ boxes.forEach(box => {
         console.log("clicked");
         let id = box.id;
         if (canclick && document.getElementById(id).innerHTML == "") {
-            // document.getElementById(id).innerHTML = symbol;
             socket.emit("clicked", id, symbol, room_id);
             canclick = false
         }
