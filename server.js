@@ -190,10 +190,12 @@ io.on('connection', (socket) => {
         console.log(gridbox);
         if (check(gridbox[room_id]) === 3) {
             console.log("Draw");
+            io.to(room_id).emit("update_grid", id, symbol);
             io.to(room_id).emit("draw", id);
         }
         else if (check(gridbox[room_id]) !== 0) {
             console.log("over");
+            io.to(room_id).emit("update_grid", id, symbol);
             io.to(room_id).emit("gameover", check(gridbox[room_id]));
         }
         else {
