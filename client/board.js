@@ -98,6 +98,12 @@ socket.on("gameover", (id) => {
     }
     gameover = true;
 })
+
+socket.on("draw", (id) => {
+    document.getElementById('logs').innerHTML = "Game is Draw, No one Won";
+    gameover = true;
+})
+
 socket.on("update_grid", (id, s) => {
     if (s === "X") {
         document.getElementById(id).innerHTML = "X";

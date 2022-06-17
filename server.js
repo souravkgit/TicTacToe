@@ -76,6 +76,9 @@ function check(grid) {
         else
             return 2;
     }
+    else if (grid[0] !== "" && grid[1] !== "" && grid[2] !== "" && grid[3] !== "" && grid[4] !== "" && grid[5] !== "" && grid[6] !== "" && grid[7] !== "" && grid[8] !== "" && grid[9] !== "") {
+        return 3;
+    }
     else
         return 0;
 }
@@ -185,11 +188,17 @@ io.on('connection', (socket) => {
         console.log("pressed " + id + " with symbol " + symbol);
         gridbox[room_id][id - 1] = symbol;
         console.log(gridbox);
-        if (check(gridbox[room_id]) !== 0) {
+        if (check(gridbox[room_id]) === 3) {
+            console.log("Draw");
+            io.to(room_id).emit("draw", id);
+        }
+        else if (check(gridbox[room_id]) !== 0) {
             console.log("over");
             io.to(room_id).emit("gameover", check(gridbox[room_id]));
         }
-        io.to(room_id).emit("update_grid", id, symbol);
+        else {
+            io.to(room_id).emit("update_grid", id, symbol);
+        }
     })
     socket.on("reload", (room_id, player_id) => {
         gridbox[room_id] = ['', '', '', '', '', '', '', '', ''];
