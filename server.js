@@ -222,6 +222,7 @@ io.on('connection', (socket) => {
             });
             if (pub_rooms[left_room].length == 0) {
                 delete pub_rooms[left_room];
+                delete gridbox[left_room];
             }
         }
 
