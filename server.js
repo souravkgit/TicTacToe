@@ -108,6 +108,7 @@ io.on('connection', (socket) => {
         socket.join(room);
         room_codes[code].push(socket.id);
         mp[socket.id] = code;
+        console.log("room created ", room_codes);
         io.to(room).emit("link", room);
         io.to(room).emit("player_connected", 1);
 
@@ -124,6 +125,8 @@ io.on('connection', (socket) => {
             socket.join(room);
             room_codes[room_key].push(socket.id);
             mp[socket.id] = room_key;
+            console.log("Joined room ", room_codes);
+
             io.to(room).emit("player_connected", 2);
             io.to(room).emit("gamestart", room);
             gridbox[room] = ['', '', '', '', '', '', '', '', ''];

@@ -47,6 +47,8 @@ socket.on("dis", (room) => {
 })
 socket.on("link", (rm) => {
     document.getElementById("text").innerHTML = "Room Code : <span>" + rm + "</span>";
+    let currloc = window.location.href;
+    window.location.href = currloc + rm;
 })
 socket.on("player_connected", (s) => {
     if (player_id === 0) {
@@ -137,11 +139,9 @@ boxes.forEach(box => {
 
 socket.on("invalid", (code) => {
     window.alert("Entered roomcode is invalid!!");
-    window.location.href = './indexfriend.html';
-    return;
+    window.location.href = './start';
 })
 socket.on("roomfull", (code) => {
     window.alert("Entered roomcode is Already Full!!");
-    window.location.href = './indexfriend.html'
-    return;
+    window.location.href = './start'
 })
