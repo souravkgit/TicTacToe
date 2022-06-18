@@ -122,7 +122,7 @@ socket.on("reload", (pid) => {
     document.getElementById('rs_btn').style.display = "none";
 })
 socket.on("hidopp", () => {
-    document.getElementById('ppic1').style.display = "none";
+    document.getElementById('p1').style.display = "none";
 })
 
 socket.on("gamestart", (room) => {

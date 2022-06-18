@@ -226,6 +226,7 @@ io.on('connection', (socket) => {
         }
         else if (pub_rooms[left_room]) {
             io.to(left_room).emit("dispub", left_room);
+            io.to(left_room).emit("hidopp");
         }
         if (room_codes[left_room]) {
             room_codes[left_room] = room_codes[left_room].filter((el) => {
