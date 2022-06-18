@@ -60,7 +60,7 @@ function CreateRoom() {
   localStorage.setItem("name", name);
   let ret = urli.replace("start", "join")
   console.log(ret);
-  window.location.href = ret + "?room=";
+  window.location.href = ret + "?room=private";
 }
 
 function Enter() {
@@ -79,4 +79,21 @@ function Enter() {
   localStorage.setItem("name", name);
   let ret = urli.replace("start", "join")
   window.location.href = ret + "?room=" + roomcode;
+}
+
+function REnter() {
+  console.log(colors);
+  if (colors.length != 1) {
+    window.alert("Please atleast select one character as profile pic!");
+    return;
+  }
+  var name = document.getElementById("name").value;
+  if (!name || name.length < 3) {
+    window.alert("Input name is invalid!!");
+    return;
+  }
+  localStorage.setItem("color", colors);
+  localStorage.setItem("name", name);
+  let ret = urli.replace("random", "join")
+  window.location.href = ret + "?room=any";
 }

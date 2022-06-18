@@ -4,13 +4,21 @@ window.onload = chngp();
 function chngp() {
     let colors = localStorage.getItem("color");
     let name = localStorage.getItem("name");
+    if (!colors || !name) {
+        window.alert("Please select profile logo and a name first!");
+        window.location.href = './random';
+        return;
+    }
     console.log(colors);
     document.getElementById("ppic").setAttribute("src", "./Utils/logo" + colors[3] + ".jpeg");
     document.getElementById("pname").innerHTML = name;
 }
 if (window.location.href.split('?')[1]) {
-    if (!window.location.href.split('?')[1].split("=")[1]) {
+    if (window.location.href.split('?')[1].split("=")[1] === "private") {
         socket.emit("createroom");
+    }
+    else if (window.location.href.split('?')[1].split("=")[1] === "any") {
+        socket.emit("joinany");
     }
     else {
         socket.emit("joinroom", window.location.href.split('?')[1].split("=")[1]);
@@ -41,9 +49,18 @@ socket.on("dis", (room) => {
     for (let index = 1; index < 10; index++) {
         document.getElementById(index).innerHTML = "";
     }
-    document.getElementById('logs').innerHTML = "Your opponent have left the game";
+    document.getElementById('logs').innerHTML = "Your opponent have left the game, send invite code to invite another player!";
     document.getElementById("text").innerHTML = "Room Code : <span>" + room + "</span>";
 })
+
+socket.on("dispub", (room) => {
+    for (let index = 1; index < 10; index++) {
+        document.getElementById(index).innerHTML = "";
+    }
+    document.getElementById('logs').innerHTML = "Your opponent have left the game, wait for another player to join or start a new game!";
+    document.getElementById("text").innerHTML = "Room Code : <span>" + room + "</span>";
+})
+
 socket.on("link", (rm) => {
     document.getElementById("text").innerHTML = "Room Code : <span>" + rm + "</span>";
 })
@@ -72,35 +89,47 @@ socket.on("reload", (pid) => {
     if (player_id == pid) {
         canclick = true;
         document.getElementById('logs').innerHTML = "New Game started , Your Turn";
+        document.getElementById('ppic').style.borderColor = "blue";
     }
     else {
         document.getElementById('logs').innerHTML = "New Game started , Opponent's Turn";
+        document.getElementById('ppic').style.borderColor = "red";
         canclick = false;
     }
+    document.getElementById('rs_btn').style.display = "none";
 })
 socket.on("gamestart", (room) => {
     room_id = room;
     if (player_id === 1) {
         canclick = true;
         document.getElementById('logs').innerHTML = "Game Started , Your Turn";
+        document.getElementById('ppic').style.borderColor = "blue";
     }
     else {
         document.getElementById('logs').innerHTML = "Game Started , Opponents's Turn";
+        document.getElementById('ppic').style.borderColor = "red";
     }
     document.getElementById("text").innerHTML = "Room Code : <span>" + room_id + "</span>";
+
 })
 socket.on("gameover", (id) => {
     if (player_id === id) {
         document.getElementById('logs').innerHTML = "You have won this round";
+        document.getElementById('ppic').style.borderColor = "green";
     }
     else {
         document.getElementById('logs').innerHTML = "Your opponent has won this round";
+        document.getElementById('ppic').style.borderColor = "red";
+        canclick = false;
     }
+    document.getElementById('rs_btn').style.display = "inherit";
     gameover = true;
 })
 
 socket.on("draw", (id) => {
     document.getElementById('logs').innerHTML = "Game is Draw, No one Won";
+    document.getElementById('ppic').style.borderColor = "green";
+    document.getElementById('rs_btn').style.display = "inherit";
     gameover = true;
 })
 
@@ -119,9 +148,11 @@ socket.on("update_grid", (id, s) => {
         if (s !== symbol) {
             canclick = true;
             document.getElementById('logs').innerHTML = "Your Turn";
+            document.getElementById('ppic').style.borderColor = "blue";
         }
         else {
             document.getElementById('logs').innerHTML = "Opponents's Turn";
+            document.getElementById('ppic').style.borderColor = "red";
         }
     }
 })
@@ -146,4 +177,8 @@ socket.on("roomfull", (code) => {
     window.alert("Entered roomcode is Already Full!!");
     window.location.href = './start';
     return;
+})
+
+document.getElementById('rs_btn').addEventListener("click", () => {
+    socket.emit("reload", room_id, player_id);
 })

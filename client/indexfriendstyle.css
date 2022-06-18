@@ -66,6 +66,7 @@ body {
   font-weight: bold;
   width: 300px;
   display: flex;
+  text-align: center;
   align-items: center;
   justify-content: center;
   border-radius: 6px;
@@ -78,6 +79,7 @@ body {
   width: 300px;
   font-weight: bold;
   color: blue;
+  text-align: center;
   height: 40px;
   display: flex;
   align-items: center;

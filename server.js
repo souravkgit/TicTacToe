@@ -139,6 +139,7 @@ io.on('connection', (socket) => {
     socket.on("joinany", () => {
         let stop = false;
         var map_length = 0;
+        console.log(pub_rooms);
         for (const key in pub_rooms) {
             if (pub_rooms[key].length === 1) {
                 let room = key;
@@ -216,7 +217,7 @@ io.on('connection', (socket) => {
             io.to(left_room).emit("link", left_room);
         }
         else if (pub_rooms[left_room]) {
-            io.to(left_room).emit("dis", left_room);
+            io.to(left_room).emit("dispub", left_room);
         }
         if (room_codes[left_room]) {
             room_codes[left_room] = room_codes[left_room].filter((el) => {
