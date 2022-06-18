@@ -30,6 +30,12 @@ body {
   flex-direction: row;
 }
 
+#p1 {
+  /* visibility: hidden; */
+  display: none;
+  justify-content: flex-start;
+  /* z-index: 4; */
+}
 .text {
   width: 70%;
   display: flex;
@@ -37,8 +43,10 @@ body {
   justify-content: center;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   font-variant: small-caps;
+  color: red;
+  font-weight: bold;
   font-weight: lighter;
-  font-size: 1rem;
+  font-size: 1.2rem;
 }
 
 .profile {
@@ -153,7 +161,7 @@ body {
 
 @media only screen and (max-width: 410px) {
   .text {
-    font-size: 0.7rem;
+    font-size: 0.8rem;
   }
   .ppic {
     height: 100px;
@@ -186,5 +194,12 @@ body {
   .cell {
     height: 70px;
     width: 70px;
+  }
+  .ppic {
+    height: 70px;
+    width: 70px;
+  }
+  .glogs {
+    font-size: 0.8rem;
   }
 }

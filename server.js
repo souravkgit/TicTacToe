@@ -86,6 +86,7 @@ var gridbox = {};
 var pub_rooms = {};
 var mp = {};
 var room_codes = {};
+var details = {};
 function createcode(length = 7) {
     var result = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -98,7 +99,7 @@ function createcode(length = 7) {
 }
 
 io.on('connection', (socket) => {
-    socket.on("createroom", () => {
+    socket.on("createroom", (colors, name) => {
         console.log("creating room");
         let code = createcode();
         while (room_codes[code]) {
@@ -109,12 +110,13 @@ io.on('connection', (socket) => {
         socket.join(room);
         room_codes[code].push(socket.id);
         mp[socket.id] = code;
+        details[code] = { "host": [colors, name] };
         console.log("room created ", room_codes);
         io.to(room).emit("link", room);
         io.to(room).emit("player_connected", 1);
 
     })
-    socket.on("joinroom", (room) => {
+    socket.on("joinroom", (room, colors, name) => {
         console.log("join request ", room);
         let room_key = room;
         console.log(room_key, room_codes);
@@ -127,16 +129,17 @@ io.on('connection', (socket) => {
             room_codes[room_key].push(socket.id);
             mp[socket.id] = room_key;
             console.log("Joined room ", room_codes);
-
+            details[room]['oppo'] = [colors, name];
             io.to(room).emit("player_connected", 2);
             io.to(room).emit("gamestart", room);
+            io.to(room).emit("updopp", details[room]);
             gridbox[room] = ['', '', '', '', '', '', '', '', ''];
         }
         else {
             socket.emit("roomfull", room_key);
         }
     })
-    socket.on("joinany", () => {
+    socket.on("joinany", (color, name) => {
         let stop = false;
         var map_length = 0;
         console.log(pub_rooms);
@@ -146,8 +149,10 @@ io.on('connection', (socket) => {
                 socket.join(room);
                 pub_rooms[key].push(socket.id);
                 mp[socket.id] = key;
+                details[key]['oppo'] = [color, name];
                 io.to(room).emit("player_connected", 2);
                 io.to(room).emit("gamestart", room);
+                io.to(room).emit("updopp", details[room]);
                 gridbox[room] = ['', '', '', '', '', '', '', '', ''];
                 stop = true;
                 break;
@@ -161,6 +166,7 @@ io.on('connection', (socket) => {
                     socket.join(room);
                     pub_rooms[key].push(socket.id);
                     mp[socket.id] = key;
+                    details[key] = { 'host': [color, name] }
                     io.to(room).emit("player_connected", 1);
                     stop = true;
                     break;
@@ -177,6 +183,7 @@ io.on('connection', (socket) => {
             socket.join(room);
             pub_rooms[code].push(socket.id);
             mp[socket.id] = code;
+            details[code] = { 'host': [color, name] }
             io.to(room).emit("player_connected", 1);
 
         }
@@ -215,6 +222,7 @@ io.on('connection', (socket) => {
         if (room_codes[left_room]) {
             io.to(left_room).emit("dis", left_room);
             io.to(left_room).emit("link", left_room);
+            io.to(left_room).emit("hidopp");
         }
         else if (pub_rooms[left_room]) {
             io.to(left_room).emit("dispub", left_room);
